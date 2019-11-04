@@ -1,0 +1,5 @@
+myvenv
+__pycache__
+.DS_Store
+sendgrid.env
+sendgrid.env
