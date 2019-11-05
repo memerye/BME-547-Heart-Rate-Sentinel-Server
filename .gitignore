@@ -1,5 +1,5 @@
 myvenv
 __pycache__
 .DS_Store
-sendgrid.env
+.idea/
 sendgrid.env
