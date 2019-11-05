@@ -4,3 +4,4 @@ testfixtures
 sphinx
 flask
 requests
+sendgrid
