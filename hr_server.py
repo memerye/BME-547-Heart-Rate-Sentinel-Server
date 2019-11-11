@@ -43,8 +43,8 @@ def validate_patient_age(patient_info):
 
 
 @app.route("/api/new_patient", methods=["POST"])
-def add_patient():
-    logging.INFO("Creating information for a new patient...")
+def add_patients():
+    logging.info("Creating information for a new patient...")
     indata = request.get_json()
     good_keys = validate_patient_keys(indata)
     if good_keys is False:
@@ -58,7 +58,7 @@ def add_patient():
         return "Please enter a valid email address.", 400
     if p_age is False:
         return "Please enter an integer age.", 400
-    logging.INFO("* ID {} has been registered in server.".format(p_id))
+    logging.info("* ID {} has been registered in server.".format(p_id))
     return "Valid patient data!"
 
 
@@ -71,4 +71,4 @@ def init_server():
 
 if __name__ == "__main__":
     init_server()
-    app.run(host="0.0.0.0")
+    app.run()
