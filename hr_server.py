@@ -226,6 +226,14 @@ def hr_list(patient_id):
     return jsonify(p_db.heart_rate)
 
 
+@app.route("/api/heart_rate/average/<patient_id>", methods=["GET"])
+def ave_hr(patient_id):
+    p_db = Patient.objects.raw({"_id": int(patient_id)}).first()
+    hr = p_db.heart_rate
+    hr_ave = int(sum(hr)/len(hr))
+    return jsonify(hr_ave)
+
+
 def init_server():
     logging.basicConfig(filename='hr_server.log',
                         level=logging.INFO,
