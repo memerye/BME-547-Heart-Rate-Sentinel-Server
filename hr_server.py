@@ -166,7 +166,6 @@ def get_age(p_id):
 
 def add_hr_to_db(p_json):
     p_id = int(p_json["patient_id"])
-    p_json["timestamp"] = str(datetime.now())
     p_db = Patient.objects.raw({"_id": p_id}).first()
     if p_db.timestamp[0] == 0:
         p_db.heart_rate[0] = int(p_json["heart_rate"])
@@ -199,12 +198,13 @@ def heart_rate():
         return "The heart rate should be an integer.", 400
     p_age = get_age(p_id)
     indata["status"] = is_tachycardia(p_age, p_hr)
+    indata["timestamp"] = str(datetime.now())
     logging.info("Saving the heart rate of patient into the database...")
     add_hr_to_db(indata)
     logging.info("* Saved heart rate of ID {} in database.".format(p_id))
     if indata["status"] is "tachycardic":
         global to_email
-        email(to_email, p_id)
+        email(to_email, p_id, p_hr, indata["timestamp"])
         logging.warning("* Sent the email to {}".format(to_email))
     logging.info("* Server receives the heart rate of ID {} "
                  "and saves it to database.".format(p_id))
