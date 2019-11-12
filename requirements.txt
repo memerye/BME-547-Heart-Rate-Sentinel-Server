@@ -5,3 +5,5 @@ sphinx
 flask
 requests
 sendgrid
+pymodm
+dnspython
