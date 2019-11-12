@@ -211,6 +211,15 @@ def heart_rate():
     return "Valid patient heart rate and saved to database!"
 
 
+@app.route("/api/status/<patient_id>", methods=["GET"])
+def status(patient_id):
+    p_db = Patient.objects.raw({"_id": int(patient_id)}).first()
+    p_dict = {"heart_rate": p_db.heart_rate[-1],
+              "status": p_db.status[-1],
+              "timestamp": p_db.timestamp[-1]}
+    return jsonify(p_dict)
+
+
 def init_server():
     logging.basicConfig(filename='hr_server.log',
                         level=logging.INFO,
