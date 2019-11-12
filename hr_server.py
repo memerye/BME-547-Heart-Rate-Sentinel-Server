@@ -1,6 +1,7 @@
 # hr_server.py
 from flask import Flask, jsonify, request
 import re
+import math
 import logging
 from datetime import datetime
 from pymodm import connect
@@ -12,7 +13,7 @@ app = Flask(__name__)
 class Patient(MongoModel):
     patient_id = fields.IntegerField(primary_key=True)
     attending_email = fields.EmailField()
-    patient_age = fields.IntegerField()
+    patient_age = fields.FloatField()
     heart_rate = fields.ListField()
     status = fields.ListField()
     timestamp = fields.ListField()
@@ -54,15 +55,12 @@ def validate_patient_email(patient_info):
 def validate_patient_age(patient_info):
     p_age = patient_info["patient_age"]
     try:
-        float(p_age)
+        age = float(p_age)
+        assert not math.isnan(age)
     except ValueError:
         return False
-    try:
-        assert float(p_age).is_integer()
     except AssertionError:
         return False
-    else:
-        age = int(p_age)
     return age
 
 
@@ -130,9 +128,43 @@ def validate_hr(patient_hr):
     return num_hr
 
 
+def is_tachycardia(age, hr):
+    if age <= 2/365 and hr > 159:
+        return "tachycardic"
+    elif 3/365 <= age <= 6/365 and hr > 166:
+        return "tachycardic"
+    elif 7/365 <= age <= 21/365 and hr > 182:
+        return "tachycardic"
+    elif 22/365 <= age <= 60/365 and hr > 179:
+        return "tachycardic"
+    elif 90/365 <= age <= 150/365 and hr > 186:
+        return "tachycardic"
+    elif 180/365 <= age <= 330/365 and hr > 169:
+        return "tachycardic"
+    elif 331/365 <= age <= 2 and hr > 151:
+        return "tachycardic"
+    elif 3 <= age <= 4 and hr > 137:
+        return "tachycardic"
+    elif 5 <= age <= 7 and hr > 133:
+        return "tachycardic"
+    elif 8 <= age <= 11 and hr > 130:
+        return "tachycardic"
+    elif 12 <= age <= 15 and hr > 119:
+        return "tachycardic"
+    elif age > 15 and hr > 100:
+        return "tachycardic"
+    else:
+        return "not tachycardic"
+
+
 def add_hr_to_db(p_json):
     logging.info("Saving the heart rate of patient into the database...")
     p_id = int(p_json["patient_id"])
+    p_hr = int(p_json["heart_rate"])
+    p_json["timestamp"] = str(datetime.now())
+    p_db_init = Patient.objects.raw({"_id": p_id}).first()
+    p_age = p_db_init.patient_age
+    p_json["status"] = is_tachycardia(p_age, p_hr)
     p_db = Patient.objects.raw({"_id": p_id}).first()
     if p_db.timestamp[0] == 0:
         p_db.heart_rate[0] = int(p_json["heart_rate"])
@@ -146,15 +178,6 @@ def add_hr_to_db(p_json):
         p_db.save()
     logging.info("* Saved heart rate of ID {} in database.".format(p_id))
     return None
-
-
-def get_age(p_id):
-    p_db = Patient.objects.raw({"_id": p_id}).first()
-    return p_db.patient_age
-
-
-def is_tachycardia(age, hr):
-    return "tachycardic"
 
 
 @app.route("/api/heart_rate", methods=["POST"])
@@ -173,12 +196,10 @@ def heart_rate():
     if p_hr is False:
         logging.error("The heart rate should be an integer.")
         return "The heart rate should be an integer.", 400
-    logging.info("* Server receives the heart rate of ID {}.".format(p_id))
-    indata["timestamp"] = str(datetime.now())
-    p_age = get_age(p_id)
-    indata["status"] = is_tachycardia(p_age, p_hr)
     add_hr_to_db(indata)
-    return "Valid patient heart rate!"
+    logging.info("* Server receives the heart rate of ID {} "
+                 "and saves it to database.".format(p_id))
+    return "Valid patient heart rate and saved to database!"
 
 
 def init_server():
