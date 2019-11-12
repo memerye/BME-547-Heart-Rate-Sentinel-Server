@@ -6,6 +6,7 @@ import logging
 from datetime import datetime
 from pymodm import connect
 from pymodm import MongoModel, fields
+from send_email import email
 
 app = Flask(__name__)
 
@@ -157,14 +158,16 @@ def is_tachycardia(age, hr):
         return "not tachycardic"
 
 
+def get_age(p_id):
+    p_db_init = Patient.objects.raw({"_id": p_id}).first()
+    return p_db_init.patient_age
+
+
 def add_hr_to_db(p_json):
     logging.info("Saving the heart rate of patient into the database...")
     p_id = int(p_json["patient_id"])
     p_hr = int(p_json["heart_rate"])
     p_json["timestamp"] = str(datetime.now())
-    p_db_init = Patient.objects.raw({"_id": p_id}).first()
-    p_age = p_db_init.patient_age
-    p_json["status"] = is_tachycardia(p_age, p_hr)
     p_db = Patient.objects.raw({"_id": p_id}).first()
     if p_db.timestamp[0] == 0:
         p_db.heart_rate[0] = int(p_json["heart_rate"])
@@ -196,7 +199,12 @@ def heart_rate():
     if p_hr is False:
         logging.error("The heart rate should be an integer.")
         return "The heart rate should be an integer.", 400
+    p_age = get_age(p_id)
+    indata["status"] = is_tachycardia(p_age, p_hr)
     add_hr_to_db(indata)
+    if indata["status"] is "tachycardic":
+        global to_email
+        email(to_email, p_id)
     logging.info("* Server receives the heart rate of ID {} "
                  "and saves it to database.".format(p_id))
     return "Valid patient heart rate and saved to database!"
@@ -211,5 +219,6 @@ def init_server():
 
 
 if __name__ == "__main__":
+    to_email = 'liangyuxu121@gmail.com'
     init_server()
     app.run()
