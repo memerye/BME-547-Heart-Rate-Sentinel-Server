@@ -129,10 +129,20 @@ def test_validate_hr(patient_hr, expected):
     assert result == expected
 
 
+@pytest.mark.parametrize("p_id, e_age", [(100, 50)])
+def test_get_age(p_id, e_age):
+    from hr_server import get_age, Patient
+    connect("mongodb+srv://python-code:xly760022@bme547-plgi0."
+            "mongodb.net/test?retryWrites=true&w=majority")
+    get_age(p_id)
+    p = Patient.objects.raw({"_id": p_id}).first()
+    assert p.patient_age == e_age
+
+
 @pytest.mark.parametrize("hr_info, e_id, e_hr, e_status", [
-    ({"patient_id": "100", "heart_rate": 120},
+    ({"patient_id": "100", "heart_rate": 120, "status": "tachycardic"},
      100, [120], ["tachycardic"]),
-    ({"patient_id": "100", "heart_rate": 80},
+    ({"patient_id": "100", "heart_rate": 80, "status": "not tachycardic"},
      100, [120, 80], ["tachycardic", "not tachycardic"])
 ])
 def test_add_hr_to_db(hr_info, e_id, e_hr, e_status):

@@ -130,32 +130,33 @@ def validate_hr(patient_hr):
 
 
 def is_tachycardia(age, hr):
-    if age <= 2/365 and hr > 159:
-        return "tachycardic"
-    elif 3/365 <= age <= 6/365 and hr > 166:
-        return "tachycardic"
-    elif 7/365 <= age <= 21/365 and hr > 182:
-        return "tachycardic"
-    elif 22/365 <= age <= 60/365 and hr > 179:
-        return "tachycardic"
-    elif 90/365 <= age <= 150/365 and hr > 186:
-        return "tachycardic"
-    elif 180/365 <= age <= 330/365 and hr > 169:
-        return "tachycardic"
-    elif 331/365 <= age <= 2 and hr > 151:
-        return "tachycardic"
-    elif 3 <= age <= 4 and hr > 137:
-        return "tachycardic"
-    elif 5 <= age <= 7 and hr > 133:
-        return "tachycardic"
-    elif 8 <= age <= 11 and hr > 130:
-        return "tachycardic"
-    elif 12 <= age <= 15 and hr > 119:
-        return "tachycardic"
-    elif age > 15 and hr > 100:
-        return "tachycardic"
-    else:
+    if age <= 2/365 and hr <= 159:
         return "not tachycardic"
+    elif 3/365 <= age <= 6/365 and hr <= 166:
+        return "not tachycardic"
+    elif 7/365 <= age <= 21/365 and hr <= 182:
+        return "not tachycardic"
+    elif 22/365 <= age <= 60/365 and hr <= 179:
+        return "not tachycardic"
+    elif 90/365 <= age <= 150/365 and hr <= 186:
+        return "not tachycardic"
+    elif 180/365 <= age <= 330/365 and hr <= 169:
+        return "not tachycardic"
+    elif 331/365 <= age <= 2 and hr <= 151:
+        return "not tachycardic"
+    elif 3 <= age <= 4 and hr <= 137:
+        return "not tachycardic"
+    elif 5 <= age <= 7 and hr <= 133:
+        return "not tachycardic"
+    elif 8 <= age <= 11 and hr <= 130:
+        return "not tachycardic"
+    elif 12 <= age <= 15 and hr <= 119:
+        return "not tachycardic"
+    elif age > 15 and hr <= 100:
+        return "not tachycardic"
+    else:
+        logging.warning("Exhibiting a tachycardic heart rate")
+        return "tachycardic"
 
 
 def get_age(p_id):
@@ -164,9 +165,7 @@ def get_age(p_id):
 
 
 def add_hr_to_db(p_json):
-    logging.info("Saving the heart rate of patient into the database...")
     p_id = int(p_json["patient_id"])
-    p_hr = int(p_json["heart_rate"])
     p_json["timestamp"] = str(datetime.now())
     p_db = Patient.objects.raw({"_id": p_id}).first()
     if p_db.timestamp[0] == 0:
@@ -179,7 +178,6 @@ def add_hr_to_db(p_json):
         p_db.status.append(p_json["status"])
         p_db.timestamp.append(p_json["timestamp"])
         p_db.save()
-    logging.info("* Saved heart rate of ID {} in database.".format(p_id))
     return None
 
 
@@ -201,10 +199,13 @@ def heart_rate():
         return "The heart rate should be an integer.", 400
     p_age = get_age(p_id)
     indata["status"] = is_tachycardia(p_age, p_hr)
+    logging.info("Saving the heart rate of patient into the database...")
     add_hr_to_db(indata)
+    logging.info("* Saved heart rate of ID {} in database.".format(p_id))
     if indata["status"] is "tachycardic":
         global to_email
         email(to_email, p_id)
+        logging.warning("* Sent the email to {}".format(to_email))
     logging.info("* Server receives the heart rate of ID {} "
                  "and saves it to database.".format(p_id))
     return "Valid patient heart rate and saved to database!"
