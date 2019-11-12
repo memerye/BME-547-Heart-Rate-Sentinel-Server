@@ -2,9 +2,20 @@
 from flask import Flask, jsonify, request
 import re
 import logging
-import datetime
+from datetime import datetime
+from pymodm import connect
+from pymodm import MongoModel, fields
 
 app = Flask(__name__)
+
+
+class Patient(MongoModel):
+    patient_id = fields.IntegerField(primary_key=True)
+    attending_email = fields.EmailField()
+    patient_age = fields.IntegerField()
+    heart_rate = fields.ListField()
+    status = fields.ListField()
+    timestamp = fields.ListField()
 
 
 def validate_patient_keys(patient_info):
@@ -55,6 +66,22 @@ def validate_patient_age(patient_info):
     return age
 
 
+def add_new_patient_to_db(p_json):
+    logging.info("Saving the new patient into the database...")
+    p_id = int(p_json["patient_id"])
+    p_email = p_json["attending_email"]
+    p_age = int(p_json["patient_age"])
+    p = Patient(patient_id=p_id,
+                attending_email=p_email,
+                patient_age=p_age,
+                heart_rate=[0],
+                status=[0],
+                timestamp=[0])
+    p.save()
+    logging.info("* ID {} has been saved in database.".format(p_id))
+    return None
+
+
 @app.route("/api/new_patient", methods=["POST"])
 def add_patients():
     logging.info("Creating information for a new patient...")
@@ -72,6 +99,7 @@ def add_patients():
     if p_age is False:
         return "Please enter an integer age.", 400
     logging.info("* ID {} has been registered in server.".format(p_id))
+    add_new_patient_to_db(indata)
     return "Valid patient data!"
 
 
@@ -98,6 +126,18 @@ def validate_hr(patient_hr):
     return num_hr
 
 
+def add_hr_to_db(p_json):
+    logging.info("Saving the heart rate of patient into the database...")
+    p_id = int(p_json["patient_id"])
+    p_db = Patient.objects.raw({"_id": p_id}).first()
+    p_db.heart_rate = int(p_json["heart_rate"])
+    p_db.status = p_json["status"]
+    p_db.timestamp = p_json["timestamp"]
+    p_db.save()
+    logging.info("* Saved heart rate of ID {} in database.".format(p_id))
+    return None
+
+
 @app.route("/api/heart_rate", methods=["POST"])
 def heart_rate():
     logging.info("Receiving heart rate from a patient...")
@@ -111,7 +151,9 @@ def heart_rate():
         return "Please enter a numeric patient ID.", 400
     if p_hr is False:
         return "The heart rate should be an integer.", 400
-    logging.info("* Server receives the heart rate from ID {}.".format(p_id))
+    logging.info("* Server receives the heart rate of ID {}.".format(p_id))
+    timestamp = str(datetime.now())
+    # add_hr_to_db(indata)
     return "Valid patient heart rate!"
 
 
@@ -119,7 +161,8 @@ def init_server():
     logging.basicConfig(filename='hr_server.log',
                         level=logging.INFO,
                         filemode='w')
-    # database
+    connect("mongodb+srv://python-code:xly760022@bme547-plgi0."
+            "mongodb.net/test?retryWrites=true&w=majority")
 
 
 if __name__ == "__main__":
