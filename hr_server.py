@@ -220,6 +220,12 @@ def status(patient_id):
     return jsonify(p_dict)
 
 
+@app.route("/api/heart_rate/<patient_id>", methods=["GET"])
+def hr_list(patient_id):
+    p_db = Patient.objects.raw({"_id": int(patient_id)}).first()
+    return jsonify(p_db.heart_rate)
+
+
 def init_server():
     logging.basicConfig(filename='hr_server.log',
                         level=logging.INFO,
