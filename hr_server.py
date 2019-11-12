@@ -88,15 +88,19 @@ def add_patients():
     indata = request.get_json()
     good_keys = validate_patient_keys(indata)
     if good_keys is False:
+        logging.error("The dictionary keys are not correct.")
         return "The dictionary keys are not correct.", 400
     p_id = validate_patient_id(indata)
     p_email = validate_patient_email(indata)
     p_age = validate_patient_age(indata)
     if p_id is False:
+        logging.error("Please enter a numeric patient ID.")
         return "Please enter a numeric patient ID.", 400
     if p_email is False:
+        logging.error("Please enter a valid email address.")
         return "Please enter a valid email address.", 400
     if p_age is False:
+        logging.error("Please enter an integer age.")
         return "Please enter an integer age.", 400
     logging.info("* ID {} has been registered in server.".format(p_id))
     add_new_patient_to_db(indata)
@@ -130,12 +134,27 @@ def add_hr_to_db(p_json):
     logging.info("Saving the heart rate of patient into the database...")
     p_id = int(p_json["patient_id"])
     p_db = Patient.objects.raw({"_id": p_id}).first()
-    p_db.heart_rate = int(p_json["heart_rate"])
-    p_db.status = p_json["status"]
-    p_db.timestamp = p_json["timestamp"]
-    p_db.save()
+    if p_db.timestamp[0] == 0:
+        p_db.heart_rate[0] = int(p_json["heart_rate"])
+        p_db.status[0] = p_json["status"]
+        p_db.timestamp[0] = p_json["timestamp"]
+        p_db.save()
+    else:
+        p_db.heart_rate.append(int(p_json["heart_rate"]))
+        p_db.status.append(p_json["status"])
+        p_db.timestamp.append(p_json["timestamp"])
+        p_db.save()
     logging.info("* Saved heart rate of ID {} in database.".format(p_id))
     return None
+
+
+def get_age(p_id):
+    p_db = Patient.objects.raw({"_id": p_id}).first()
+    return p_db.patient_age
+
+
+def is_tachycardia(age, hr):
+    return "tachycardic"
 
 
 @app.route("/api/heart_rate", methods=["POST"])
@@ -144,16 +163,21 @@ def heart_rate():
     indata = request.get_json()
     good_keys = validate_hr_keys(indata)
     if good_keys is False:
+        logging.error("The dictionary keys are not correct.")
         return "The dictionary keys are not correct.", 400
     p_id = validate_patient_id(indata)
     p_hr = validate_hr(indata)
     if p_id is False:
+        logging.error("Please enter a numeric patient ID.")
         return "Please enter a numeric patient ID.", 400
     if p_hr is False:
+        logging.error("The heart rate should be an integer.")
         return "The heart rate should be an integer.", 400
     logging.info("* Server receives the heart rate of ID {}.".format(p_id))
-    timestamp = str(datetime.now())
-    # add_hr_to_db(indata)
+    indata["timestamp"] = str(datetime.now())
+    p_age = get_age(p_id)
+    indata["status"] = is_tachycardia(p_age, p_hr)
+    add_hr_to_db(indata)
     return "Valid patient heart rate!"
 
 

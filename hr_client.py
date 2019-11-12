@@ -39,11 +39,11 @@ if __name__ == '__main__':
              "attending_email": "dr_user_idyour@domain.com",
              "patient_age": 50}
     post_a_patient(info5)
-    # hr1 = {"patientid": "1", "heart_rate": 100}
-    # post_heart_rate(hr1)
-    # hr2 = {"patient_id": "1.5", "heart_rate": 100}
-    # post_heart_rate(hr2)
-    # hr3 = {"patient_id": "1", "heart_rate": 100.5}
-    # post_heart_rate(hr3)
-    # hr4 = {"patient_id": "1", "heart_rate": 100}
-    # post_heart_rate(hr4)
+    hr1 = {"patientid": "1", "heart_rate": 100}
+    post_heart_rate(hr1)
+    hr2 = {"patient_id": "1.5", "heart_rate": 100}
+    post_heart_rate(hr2)
+    hr3 = {"patient_id": "1", "heart_rate": 100.5}
+    post_heart_rate(hr3)
+    hr4 = {"patient_id": "1", "heart_rate": 100}
+    post_heart_rate(hr4)
