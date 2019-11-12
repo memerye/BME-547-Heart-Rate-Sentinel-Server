@@ -234,6 +234,27 @@ def ave_hr(patient_id):
     return jsonify(hr_ave)
 
 
+@app.route("/api/heart_rate/interval_average", methods=["POST"])
+def ave_hr_since():
+    indata = request.get_json()
+    p_id = indata["patient_id"]
+    start_t_str = indata["heart_rate_average_since"]
+    start_t = datetime.strptime(start_t_str, '%Y-%m-%d %H:%M:%S.%f')
+    p_db = Patient.objects.raw({"_id": int(p_id)}).first()
+    hrs = p_db.heart_rate
+    timestamps = p_db.timestamp
+    hr_list = []
+    for t, hr in zip(timestamps, hrs):
+        record_t = datetime.strptime(t, '%Y-%m-%d %H:%M:%S.%f')
+        if record_t > start_t:
+            hr_list.append(hr)
+    if len(hr_list) == 0:
+        return "No heart rate record before this timestamp", 400
+    else:
+        hr_ave = int(sum(hr_list)/len(hr_list))
+        return jsonify(hr_ave)
+
+
 def init_server():
     logging.basicConfig(filename='hr_server.log',
                         level=logging.INFO,

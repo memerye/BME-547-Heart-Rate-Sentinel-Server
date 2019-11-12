@@ -18,7 +18,15 @@ def post_heart_rate(info):
     print(r.status_code)
 
 
-def test_validate_infos():
+def post_ave_heart_rate_since(info):
+    r = requests.post("http://127.0.0.1:5000/api/heart_rate/interval_average",
+                      json=info)
+    print(r)
+    print(r.text)
+    print(r.status_code)
+
+
+def test_add_patients():
     p_info = [{"patientid": "1",
                "attending_email": "dr_user_id@yourdomain.com",
                "patient_age": 50},
@@ -45,7 +53,7 @@ def test_validate_infos():
     return None
 
 
-def test_validate_hr_infos():
+def test_heart_rate():
     p_hr = [{"patientid": "5", "heart_rate": 100},
             {"patient_id": "5.5", "heart_rate": 100},
             {"patient_id": "5", "heart_rate": 100.5},
@@ -63,6 +71,17 @@ def test_validate_hr_infos():
     return None
 
 
+def test_ave_hr_since():
+    hr_since = [{"patient_id": "5",
+                 "heart_rate_average_since": "2020-11-12 16:15:38.991052"},
+                {"patient_id": "6",
+                 "heart_rate_average_since": "2019-11-12 16:16:38.991052"}]
+    for hr in hr_since:
+        post_ave_heart_rate_since(hr)
+    return None
+
+
 if __name__ == '__main__':
-    test_validate_infos()
-    test_validate_hr_infos()
+    test_add_patients()
+    test_heart_rate()
+    test_ave_hr_since()
