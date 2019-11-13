@@ -130,19 +130,7 @@ def validate_hr(patient_hr):
 
 
 def is_tachycardia(age, hr):
-    if age <= 2/365 and hr <= 159:
-        return "not tachycardic"
-    elif 3/365 <= age <= 6/365 and hr <= 166:
-        return "not tachycardic"
-    elif 7/365 <= age <= 21/365 and hr <= 182:
-        return "not tachycardic"
-    elif 22/365 <= age <= 60/365 and hr <= 179:
-        return "not tachycardic"
-    elif 90/365 <= age <= 150/365 and hr <= 186:
-        return "not tachycardic"
-    elif 180/365 <= age <= 330/365 and hr <= 169:
-        return "not tachycardic"
-    elif 331/365 <= age <= 2 and hr <= 151:
+    if 1 <= age <= 2 and hr <= 151:
         return "not tachycardic"
     elif 3 <= age <= 4 and hr <= 137:
         return "not tachycardic"

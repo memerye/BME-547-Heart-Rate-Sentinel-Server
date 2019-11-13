@@ -130,18 +130,6 @@ def test_validate_hr(patient_hr, expected):
 
 
 @pytest.mark.parametrize("age, hr, expected", [
-    (1/365, 150, "not tachycardic"),
-    (1/365, 160, "tachycardic"),
-    (4/365, 160, "not tachycardic"),
-    (4/365, 170, "tachycardic"),
-    (10/365, 180, "not tachycardic"),
-    (10/365, 190, "tachycardic"),
-    (50/365, 170, "not tachycardic"),
-    (50/365, 180, "tachycardic"),
-    (100/365, 180, "not tachycardic"),
-    (100/365, 190, "tachycardic"),
-    (200/365, 160, "not tachycardic"),
-    (200/365, 170, "tachycardic"),
     (1, 150, "not tachycardic"),
     (1, 160, "tachycardic"),
     (3, 130, "not tachycardic"),
