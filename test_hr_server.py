@@ -1,8 +1,6 @@
 # test_hr_server.py
 import pytest
-from testfixtures import LogCapture
 from pymodm import connect
-from datetime import datetime
 
 
 @pytest.mark.parametrize("patient_info, expected", [
@@ -111,6 +109,13 @@ def test_validate_hr_keys(patient_hr, expected):
     assert result == expected
 
 
+@pytest.mark.parametrize("p_id, expected", [(100, True), (101, False)])
+def test_validate_existing_id(p_id, expected):
+    from hr_server import validate_existing_id
+    result = validate_existing_id(p_id)
+    assert result == expected
+
+
 @pytest.mark.parametrize("patient_hr, expected", [
     ({"patient_id": "1",
       "heart_rate": 100}, 100),
@@ -182,6 +187,35 @@ def test_add_hr_to_db(hr_info, e_id, e_hr, e_status, e_timestamp):
     assert p.timestamp == e_timestamp
 
 
+@pytest.mark.parametrize("indata, expected", [
+    ({"patient_id": "100",
+      "heart_rate_average_since": "2019-11-11 11:00:00.00"}, True),
+    ({"patientid": "100",
+      "heart_rate_average_since": "2020-11-11 11:00:00.00"}, False),
+    ({"patient_id": "100",
+      "heartrate_average_since": "2020-11-11 11:00:00.00"}, False)
+])
+def test_validate_avr_hr_keys(indata, expected):
+    from hr_server import validate_avr_hr_keys
+    result = validate_avr_hr_keys(indata)
+    assert result == expected
+
+
+@pytest.mark.parametrize("indata, expected", [
+    ({"patient_id": "100",
+      "heart_rate_average_since": "2019-11-11 11:00:00.00"},
+     "2019-11-11 11:00:00.00"),
+    ({"patient_id": "100",
+      "heart_rate_average_since": "2020-11-11 11:00:00"}, False),
+    ({"patient_id": "100",
+      "heart_rate_average_since": 2019}, False)
+])
+def test_validate_time(indata, expected):
+    from hr_server import validate_time
+    result = validate_time(indata)
+    assert result == expected
+
+
 @pytest.mark.parametrize("p_id, e_hrs, e_timestamps",
                          [(100, [120, 80],
                           ['2019-11-12 13:05:35.00',
@@ -196,13 +230,11 @@ def test_hr_and_t(p_id, e_hrs, e_timestamps):
     assert p.timestamp == e_timestamps
 
 
-@pytest.mark.parametrize("indata, expected", [
-    ({"patient_id": "100",
-      "heart_rate_average_since": "2019-11-11 11:00:00.00"}, 100),
-    ({"patient_id": "100",
-      "heart_rate_average_since": "2020-11-11 11:00:00.00"}, False)
+@pytest.mark.parametrize("p_id, start_t_str, expected", [
+    (100, "2019-11-11 11:00:00.00", 100),
+    (100, "2020-11-11 11:00:00.00", False)
 ])
-def test_ave_hr_since(indata, expected):
+def test_ave_hr_since(p_id, start_t_str, expected):
     from hr_server import ave_hr_since
-    hr_ave = ave_hr_since(indata)
+    hr_ave = ave_hr_since(p_id, start_t_str)
     assert hr_ave == expected
