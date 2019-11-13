@@ -130,18 +130,6 @@ def test_validate_hr(patient_hr, expected):
 
 
 @pytest.mark.parametrize("age, hr, expected", [
-    (1/365, 150, "not tachycardic"),
-    (1/365, 160, "tachycardic"),
-    (4/365, 160, "not tachycardic"),
-    (4/365, 170, "tachycardic"),
-    (10/365, 180, "not tachycardic"),
-    (10/365, 190, "tachycardic"),
-    (50/365, 170, "not tachycardic"),
-    (50/365, 180, "tachycardic"),
-    (100/365, 180, "not tachycardic"),
-    (100/365, 190, "tachycardic"),
-    (200/365, 160, "not tachycardic"),
-    (200/365, 170, "tachycardic"),
     (1, 150, "not tachycardic"),
     (1, 160, "tachycardic"),
     (3, 130, "not tachycardic"),
@@ -162,22 +150,25 @@ def test_validate_hr(age, hr, expected):
 
 
 @pytest.mark.parametrize("p_id, e_age", [(100, 50)])
-def test_get_age(p_id, e_age):
-    from hr_server import get_age, Patient
+def test_age(p_id, e_age):
+    from hr_server import age, Patient
     connect("mongodb+srv://python-code:xly760022@bme547-plgi0."
             "mongodb.net/test?retryWrites=true&w=majority")
-    get_age(p_id)
+    age(p_id)
     p = Patient.objects.raw({"_id": p_id}).first()
     assert p.patient_age == e_age
 
 
 @pytest.mark.parametrize("hr_info, e_id, e_hr, e_status, e_timestamp", [
     ({"patient_id": "100", "heart_rate": 120,
-      "status": "tachycardic", "timestamp": "11:20"},
-     100, [120], ["tachycardic"], ["11:20"]),
+      "status": "tachycardic",
+      "timestamp": '2019-11-12 13:05:35.00'},
+     100, [120], ["tachycardic"], ['2019-11-12 13:05:35.00']),
     ({"patient_id": "100", "heart_rate": 80,
-      "status": "not tachycardic", "timestamp": "11:21"},
-     100, [120, 80], ["tachycardic", "not tachycardic"], ["11:20", "11:21"])
+      "status": "not tachycardic",
+      "timestamp": '2019-11-12 13:06:35.00'},
+     100, [120, 80], ["tachycardic", "not tachycardic"],
+     ['2019-11-12 13:05:35.00', '2019-11-12 13:06:35.00'])
 ])
 def test_add_hr_to_db(hr_info, e_id, e_hr, e_status, e_timestamp):
     from hr_server import add_hr_to_db, Patient
@@ -189,3 +180,29 @@ def test_add_hr_to_db(hr_info, e_id, e_hr, e_status, e_timestamp):
     assert p.heart_rate == e_hr
     assert p.status == e_status
     assert p.timestamp == e_timestamp
+
+
+@pytest.mark.parametrize("p_id, e_hrs, e_timestamps",
+                         [(100, [120, 80],
+                          ['2019-11-12 13:05:35.00',
+                           '2019-11-12 13:06:35.00'])])
+def test_hr_and_t(p_id, e_hrs, e_timestamps):
+    from hr_server import hr_and_t, Patient
+    connect("mongodb+srv://python-code:xly760022@bme547-plgi0."
+            "mongodb.net/test?retryWrites=true&w=majority")
+    hrs, timestamps = hr_and_t(p_id)
+    p = Patient.objects.raw({"_id": p_id}).first()
+    assert p.heart_rate == hrs
+    assert p.timestamp == e_timestamps
+
+
+@pytest.mark.parametrize("indata, expected", [
+    ({"patient_id": "100",
+      "heart_rate_average_since": "2019-11-11 11:00:00.00"}, 100),
+    ({"patient_id": "100",
+      "heart_rate_average_since": "2020-11-11 11:00:00.00"}, False)
+])
+def test_ave_hr_since(indata, expected):
+    from hr_server import ave_hr_since
+    hr_ave = ave_hr_since(indata)
+    assert hr_ave == expected

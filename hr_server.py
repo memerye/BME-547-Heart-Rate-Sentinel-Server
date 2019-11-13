@@ -66,7 +66,6 @@ def validate_patient_age(patient_info):
 
 
 def add_new_patient_to_db(p_json):
-    logging.info("Saving the new patient into the database...")
     p_id = int(p_json["patient_id"])
     p_email = p_json["attending_email"]
     p_age = int(p_json["patient_age"])
@@ -77,32 +76,27 @@ def add_new_patient_to_db(p_json):
                 status=[0],
                 timestamp=[0])
     p.save()
-    logging.info("* ID {} has been saved in database.".format(p_id))
     return None
 
 
 @app.route("/api/new_patient", methods=["POST"])
-def add_patients():
-    logging.info("Creating information for a new patient...")
+def post_add_patients():
     indata = request.get_json()
     good_keys = validate_patient_keys(indata)
     if good_keys is False:
-        logging.error("The dictionary keys are not correct.")
         return "The dictionary keys are not correct.", 400
     p_id = validate_patient_id(indata)
     p_email = validate_patient_email(indata)
     p_age = validate_patient_age(indata)
     if p_id is False:
-        logging.error("Please enter a numeric patient ID.")
         return "Please enter a numeric patient ID.", 400
     if p_email is False:
-        logging.error("Please enter a valid email address.")
         return "Please enter a valid email address.", 400
     if p_age is False:
-        logging.error("Please enter an integer age.")
         return "Please enter an integer age.", 400
-    logging.info("* ID {} has been registered in server.".format(p_id))
     add_new_patient_to_db(indata)
+    logging.info("* ID {} has been registered in server."
+                 .format(p_id))
     return "Valid patient data!"
 
 
@@ -130,19 +124,7 @@ def validate_hr(patient_hr):
 
 
 def is_tachycardia(age, hr):
-    if age <= 2/365 and hr <= 159:
-        return "not tachycardic"
-    elif 3/365 <= age <= 6/365 and hr <= 166:
-        return "not tachycardic"
-    elif 7/365 <= age <= 21/365 and hr <= 182:
-        return "not tachycardic"
-    elif 22/365 <= age <= 60/365 and hr <= 179:
-        return "not tachycardic"
-    elif 90/365 <= age <= 150/365 and hr <= 186:
-        return "not tachycardic"
-    elif 180/365 <= age <= 330/365 and hr <= 169:
-        return "not tachycardic"
-    elif 331/365 <= age <= 2 and hr <= 151:
+    if 1 <= age <= 2 and hr <= 151:
         return "not tachycardic"
     elif 3 <= age <= 4 and hr <= 137:
         return "not tachycardic"
@@ -155,11 +137,10 @@ def is_tachycardia(age, hr):
     elif age > 15 and hr <= 100:
         return "not tachycardic"
     else:
-        logging.warning("Exhibiting a tachycardic heart rate")
         return "tachycardic"
 
 
-def get_age(p_id):
+def age(p_id):
     p_db_init = Patient.objects.raw({"_id": p_id}).first()
     return p_db_init.patient_age
 
@@ -181,38 +162,33 @@ def add_hr_to_db(p_json):
 
 
 @app.route("/api/heart_rate", methods=["POST"])
-def heart_rate():
-    logging.info("Receiving heart rate from a patient...")
+def post_heart_rate():
     indata = request.get_json()
     good_keys = validate_hr_keys(indata)
     if good_keys is False:
-        logging.error("The dictionary keys are not correct.")
         return "The dictionary keys are not correct.", 400
     p_id = validate_patient_id(indata)
     p_hr = validate_hr(indata)
     if p_id is False:
-        logging.error("Please enter a numeric patient ID.")
         return "Please enter a numeric patient ID.", 400
     if p_hr is False:
-        logging.error("The heart rate should be an integer.")
         return "The heart rate should be an integer.", 400
-    p_age = get_age(p_id)
+    p_age = age(p_id)
     indata["status"] = is_tachycardia(p_age, p_hr)
     indata["timestamp"] = str(datetime.now())
-    logging.info("Saving the heart rate of patient into the database...")
     add_hr_to_db(indata)
-    logging.info("* Saved heart rate of ID {} in database.".format(p_id))
     if indata["status"] is "tachycardic":
         global to_email
         email(to_email, p_id, p_hr, indata["timestamp"])
-        logging.warning("* Sent the email to {}".format(to_email))
-    logging.info("* Server receives the heart rate of ID {} "
-                 "and saves it to database.".format(p_id))
+        logging.warning("* Sent the email to {}."
+                        "\n               Patient ID: {}"
+                        "\n               Heart rate: {}"
+                        .format(to_email, p_id, p_hr))
     return "Valid patient heart rate and saved to database!"
 
 
 @app.route("/api/status/<patient_id>", methods=["GET"])
-def status(patient_id):
+def get_status(patient_id):
     p_db = Patient.objects.raw({"_id": int(patient_id)}).first()
     p_dict = {"heart_rate": p_db.heart_rate[-1],
               "status": p_db.status[-1],
@@ -221,38 +197,51 @@ def status(patient_id):
 
 
 @app.route("/api/heart_rate/<patient_id>", methods=["GET"])
-def hr_list(patient_id):
+def get_hr_list(patient_id):
     p_db = Patient.objects.raw({"_id": int(patient_id)}).first()
     return jsonify(p_db.heart_rate)
 
 
 @app.route("/api/heart_rate/average/<patient_id>", methods=["GET"])
-def ave_hr(patient_id):
+def get_ave_hr(patient_id):
     p_db = Patient.objects.raw({"_id": int(patient_id)}).first()
     hr = p_db.heart_rate
     hr_ave = int(sum(hr)/len(hr))
     return jsonify(hr_ave)
 
 
-@app.route("/api/heart_rate/interval_average", methods=["POST"])
-def ave_hr_since():
-    indata = request.get_json()
-    p_id = indata["patient_id"]
-    start_t_str = indata["heart_rate_average_since"]
-    start_t = datetime.strptime(start_t_str, '%Y-%m-%d %H:%M:%S.%f')
+def hr_and_t(p_id):
     p_db = Patient.objects.raw({"_id": int(p_id)}).first()
     hrs = p_db.heart_rate
     timestamps = p_db.timestamp
+    return hrs, timestamps
+
+
+def ave_hr_since(indata):
+    p_id = indata["patient_id"]
+    start_t_str = indata["heart_rate_average_since"]
+    start_t = datetime.strptime(start_t_str, '%Y-%m-%d %H:%M:%S.%f')
+    hrs, timestamps = hr_and_t(p_id)
     hr_list = []
     for t, hr in zip(timestamps, hrs):
         record_t = datetime.strptime(t, '%Y-%m-%d %H:%M:%S.%f')
         if record_t > start_t:
             hr_list.append(hr)
     if len(hr_list) == 0:
-        return "No heart rate record before this timestamp", 400
+        return False
     else:
-        hr_ave = int(sum(hr_list)/len(hr_list))
+        hr_ave = int(sum(hr_list) / len(hr_list))
+        return hr_ave
+
+
+@app.route("/api/heart_rate/interval_average", methods=["POST"])
+def post_ave_hr_since():
+    indata = request.get_json()
+    hr_ave = ave_hr_since(indata)
+    if hr_ave:
         return jsonify(hr_ave)
+    else:
+        return "No heart rate record before this timestamp.", 400
 
 
 def init_server():
