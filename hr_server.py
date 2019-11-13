@@ -86,12 +86,12 @@ def post_add_patients():
     if good_keys is False:
         return "The dictionary keys are not correct.", 400
     p_id = validate_patient_id(indata)
-    p_email = validate_patient_email(indata)
-    p_age = validate_patient_age(indata)
     if p_id is False:
         return "Please enter a numeric patient ID.", 400
+    p_email = validate_patient_email(indata)
     if p_email is False:
         return "Please enter a valid email address.", 400
+    p_age = validate_patient_age(indata)
     if p_age is False:
         return "Please enter an integer age.", 400
     add_new_patient_to_db(indata)
@@ -106,6 +106,16 @@ def validate_hr_keys(patient_hr):
         if key not in expected_keys:
             return False
     return True
+
+
+def validate_existing_id(p_id):
+    id_list = []
+    for p in Patient.objects.raw({}):
+        id_list.append(p.patient_id)
+    if p_id in id_list:
+        return True
+    else:
+        return False
 
 
 def validate_hr(patient_hr):
@@ -168,11 +178,14 @@ def post_heart_rate():
     if good_keys is False:
         return "The dictionary keys are not correct.", 400
     p_id = validate_patient_id(indata)
-    p_hr = validate_hr(indata)
     if p_id is False:
         return "Please enter a numeric patient ID.", 400
+    p_id_exist = validate_existing_id(p_id)
+    if p_id_exist is False:
+        return "The patient ID doesn't exist.", 400
+    p_hr = validate_hr(indata)
     if p_hr is False:
-        return "The heart rate should be an integer.", 400
+        return "Please enter an integer heart rate.", 400
     p_age = age(p_id)
     indata["status"] = is_tachycardia(p_age, p_hr)
     indata["timestamp"] = str(datetime.now())
@@ -210,6 +223,26 @@ def get_ave_hr(patient_id):
     return jsonify(hr_ave)
 
 
+def validate_avr_hr_keys(patient_hr):
+    expected_keys = ["patient_id", "heart_rate_average_since"]
+    for key in patient_hr.keys():
+        if key not in expected_keys:
+            return False
+    return True
+
+
+def validate_time(indata):
+    time = indata["heart_rate_average_since"]
+    try:
+        datetime.strptime(time, '%Y-%m-%d %H:%M:%S.%f')
+    except TypeError:
+        return False
+    except ValueError:
+        return False
+    else:
+        return time
+
+
 def hr_and_t(p_id):
     p_db = Patient.objects.raw({"_id": int(p_id)}).first()
     hrs = p_db.heart_rate
@@ -217,9 +250,7 @@ def hr_and_t(p_id):
     return hrs, timestamps
 
 
-def ave_hr_since(indata):
-    p_id = indata["patient_id"]
-    start_t_str = indata["heart_rate_average_since"]
+def ave_hr_since(p_id, start_t_str):
     start_t = datetime.strptime(start_t_str, '%Y-%m-%d %H:%M:%S.%f')
     hrs, timestamps = hr_and_t(p_id)
     hr_list = []
@@ -237,7 +268,20 @@ def ave_hr_since(indata):
 @app.route("/api/heart_rate/interval_average", methods=["POST"])
 def post_ave_hr_since():
     indata = request.get_json()
-    hr_ave = ave_hr_since(indata)
+    good_keys = validate_avr_hr_keys(indata)
+    if good_keys is False:
+        return "The dictionary keys are not correct.", 400
+    p_id = validate_patient_id(indata)
+    if p_id is False:
+        return "Please enter a numeric patient ID.", 400
+    p_id_exist = validate_existing_id(p_id)
+    if p_id_exist is False:
+        return "The patient ID doesn't exist.", 400
+    t_start = validate_time(indata)
+    if t_start is False:
+        return "Please enter the valid datetime with " \
+               "format '%Y-%m-%d %H:%M:%S.%f'", 400
+    hr_ave = ave_hr_since(p_id, t_start)
     if hr_ave:
         return jsonify(hr_ave)
     else:

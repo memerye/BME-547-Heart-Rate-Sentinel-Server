@@ -30,7 +30,7 @@ def test_add_patients():
     p_info = [{"patientid": "1",
                "attending_email": "dr_user_id@yourdomain.com",
                "patient_age": 50},
-              {"patient_id": "2.5",
+              {"patient_id": "2.5a",
                "attending_email": "dr_user_id@yourdomain.com",
                "patient_age": 50},
               {"patient_id": "3",
@@ -40,7 +40,7 @@ def test_add_patients():
                "attending_email": "dr_user_idyour@domain.com",
                "patient_age": "a50"},
               {"patient_id": "5",
-               "attending_email": "dr_user_idyour@domain.com",
+               "attending_email": "5555@domain.com",
                "patient_age": 50},
               {"patient_id": "6",
                "attending_email": "6666@domain.com",
@@ -56,6 +56,7 @@ def test_add_patients():
 def test_heart_rate():
     p_hr = [{"patientid": "5", "heart_rate": 100},
             {"patient_id": "5.5", "heart_rate": 100},
+            {"patient_id": "8", "heart_rate": 100},
             {"patient_id": "5", "heart_rate": 100.5},
             {"patient_id": "5", "heart_rate": 100},
             {"patient_id": "5", "heart_rate": 120},
@@ -72,9 +73,17 @@ def test_heart_rate():
 
 
 def test_ave_hr_since():
-    hr_since = [{"patient_id": "5",
+    hr_since = [{"patientid": "5",
                  "heart_rate_average_since": "2020-11-12 16:15:38.991052"},
-                {"patient_id": "6",
+                {"patient_id": "5a",
+                 "heart_rate_average_since": "2020-11-12 16:15:38.991052"},
+                {"patient_id": "8",
+                 "heart_rate_average_since": "2020-11-12 16:15:38.991052"},
+                {"patient_id": "5",
+                 "heart_rate_average_since": "2020-11-12 16:15:38"},
+                {"patient_id": "5",
+                 "heart_rate_average_since": "2020-11-12 16:15:38.991052"},
+                {"patient_id": "5",
                  "heart_rate_average_since": "2019-11-12 16:16:38.991052"}]
     for hr in hr_since:
         post_ave_heart_rate_since(hr)
