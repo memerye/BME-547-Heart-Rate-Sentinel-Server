@@ -181,8 +181,9 @@ def post_heart_rate():
         global to_email
         email(to_email, p_id, p_hr, indata["timestamp"])
         logging.warning("* Sent the email to {}."
-                        "  Patient ID: {}"
-                        "  Heart rate: {}".format(to_email, p_id, p_hr))
+                        "\n               Patient ID: {}"
+                        "\n               Heart rate: {}"
+                        .format(to_email, p_id, p_hr))
     return "Valid patient heart rate and saved to database!"
 
 
