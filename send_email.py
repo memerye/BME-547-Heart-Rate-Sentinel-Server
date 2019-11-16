@@ -1,3 +1,4 @@
+# send_email.py
 import os
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
@@ -12,7 +13,7 @@ def email(to_email, p_id, hr, time, send):
         p_id (int): the patient id
         hr (int): the heart rate
         time (string): the timestamp
-        send (bool): the flag of send email or not
+        send (bool): the flag of sending email or not
 
     Returns:
         None

@@ -332,9 +332,9 @@ def post_heart_rate():
     """Post new patient heart rate information to the database.
 
     Before posting new patient heart rate information to database,
-    the keys and the values in the posted json should all be validated
-    first. The existence of the patient id should be checked next.
-    All of the failures in validation and check would raise error in
+    the keys and the values in the posted json are all validated
+    first. The existence of the patient id are checked next. All
+    of the failures in validation and check would raise error in
     server. Then the new patient heart rate information can be
     registered in the server as well as saved in the database. The
     "patient_id" is still the primary key for each patient, we update
@@ -343,7 +343,8 @@ def post_heart_rate():
     same "patient_id" to the database, it would add the heart rate
     information as a list under that id. If there are anything invalid
     in the posted json, the server will return error status codes with
-    reasons.
+    reasons. If any of the heart rate exhibits tachycardic, an email
+    will be sent to doctor's email.
 
     Returns:
         string: message to indicate the status of the server.
@@ -583,11 +584,17 @@ def post_ave_hr_since():
 
 
 def init_server():
+    """Initialize the logging configuration and database connection.
+
+    Returns:
+        None.
+    """
     logging.basicConfig(filename='hr_server.log',
                         level=logging.INFO,
                         filemode='w')
     connect("mongodb+srv://python-code:xly760022@bme547-plgi0."
             "mongodb.net/test?retryWrites=true&w=majority")
+    return None
 
 
 if __name__ == "__main__":

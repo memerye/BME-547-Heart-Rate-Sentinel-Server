@@ -3,6 +3,14 @@ import requests
 
 
 def post_a_patient(info):
+    """The client function of posting a new patient.
+
+    Args:
+        info (dict): the dictionary of patient's information.
+
+    Returns:
+        None
+    """
     r = requests.post("http://127.0.0.1:5000/api/new_patient",
                       json=info)
     print(r)
@@ -11,6 +19,14 @@ def post_a_patient(info):
 
 
 def post_heart_rate(info):
+    """The client function of posting a new heart rate.
+
+    Args:
+        info (dict): the dictionary of patient's information.
+
+    Returns:
+        None
+    """
     r = requests.post("http://127.0.0.1:5000/api/heart_rate",
                       json=info)
     print(r)
@@ -19,6 +35,14 @@ def post_heart_rate(info):
 
 
 def post_ave_heart_rate_since(info):
+    """The client function of posting a timestamp to get the interval average.
+
+    Args:
+        info (dict): the dictionary of patient's information.
+
+    Returns:
+        None
+    """
     r = requests.post("http://127.0.0.1:5000/api/heart_rate/interval_average",
                       json=info)
     print(r)
@@ -27,6 +51,19 @@ def post_ave_heart_rate_since(info):
 
 
 def test_add_patients():
+    """Create a pseudo-list of patients information to
+    add into the server and database.
+
+    The pseudo-list of patients contains error of:
+    (1) wrong dictionary keys
+    (2) invalid patient id
+    (3) invalid patient email address
+    (4) invalid patient age
+    And three valid patient information with the id of 5, 6, and 7.
+
+    Returns:
+        None
+    """
     p_info = [{"patientid": "1",
                "attending_email": "dr_user_id@yourdomain.com",
                "patient_age": 50},
@@ -54,6 +91,20 @@ def test_add_patients():
 
 
 def test_heart_rate():
+    """Create a pseudo-list of patients heart rate information to
+    add into the server and database.
+
+    The pseudo-list of patients contains error of:
+    (1) wrong dictionary keys
+    (2) invalid patient id
+    (3) not exist patient id
+    (4) invalid patient heart rate
+    And nine valid patient hear rate information equally distributed
+    with the id of 5, 6, and 7.
+
+    Returns:
+        None
+    """
     p_hr = [{"patientid": "5", "heart_rate": 100},
             {"patient_id": "5.5", "heart_rate": 100},
             {"patient_id": "8", "heart_rate": 100},
@@ -73,6 +124,21 @@ def test_heart_rate():
 
 
 def test_ave_hr_since():
+    """Create a pseudo-list of time information to calculate the
+    interval average heart rate.
+
+    The pseudo-list of patients contains error of:
+    (1) wrong dictionary keys
+    (2) invalid patient id
+    (3) not exist patient id
+    (3) invalid timestamp
+    (4) no timestamp in database is ahead of given timestamp
+    And one valid time information to calculate the interval average
+    heart rate of id 5 since "2019-11-12 16:16:38.991052".
+
+    Returns:
+        None
+    """
     hr_since = [{"patientid": "5",
                  "heart_rate_average_since": "2020-11-12 16:15:38.991052"},
                 {"patient_id": "5a",
@@ -91,6 +157,13 @@ def test_ave_hr_since():
 
 
 def request_on_status():
+    """The client function of getting heart rate status of a patient
+
+    The result will be printed out.
+
+    Returns:
+        None
+    """
     ids = [8, 5]
     for p_id in ids:
         r = requests.get("http://127.0.0.1:5000/api/status/{}".format(p_id))
@@ -103,9 +176,17 @@ def request_on_status():
 
 
 def request_on_hr_list():
+    """The client function of getting heart rate list of a patient
+
+    The result will be printed out.
+
+    Returns:
+        None
+    """
     ids = [8, 5]
     for p_id in ids:
-        r = requests.get("http://127.0.0.1:5000/api/heart_rate/{}".format(p_id))
+        r = requests.get("http://127.0.0.1:5000/api/heart_rate/{}"
+                         .format(p_id))
         print(r)
         print(r.text)
         print(r.status_code)
@@ -115,9 +196,17 @@ def request_on_hr_list():
 
 
 def request_on_ave_hr():
+    """The client function of getting average heart rate of a patient
+
+    The result will be printed out.
+
+    Returns:
+        None
+    """
     ids = [8, 5]
     for p_id in ids:
-        r = requests.get("http://127.0.0.1:5000/api/heart_rate/average/{}".format(p_id))
+        r = requests.get("http://127.0.0.1:5000/api/heart_rate/average/{}"
+                         .format(p_id))
         print(r)
         print(r.text)
         print(r.status_code)
