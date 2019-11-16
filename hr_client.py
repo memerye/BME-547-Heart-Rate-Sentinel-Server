@@ -90,7 +90,46 @@ def test_ave_hr_since():
     return None
 
 
+def request_on_status():
+    ids = [8, 5]
+    for p_id in ids:
+        r = requests.get("http://127.0.0.1:5000/api/status/{}".format(p_id))
+        print(r)
+        print(r.text)
+        print(r.status_code)
+        if r.status_code == 200:
+            answer = r.json()
+            print(answer)
+
+
+def request_on_hr_list():
+    ids = [8, 5]
+    for p_id in ids:
+        r = requests.get("http://127.0.0.1:5000/api/heart_rate/{}".format(p_id))
+        print(r)
+        print(r.text)
+        print(r.status_code)
+        if r.status_code == 200:
+            answer = r.json()
+            print(answer)
+
+
+def request_on_ave_hr():
+    ids = [8, 5]
+    for p_id in ids:
+        r = requests.get("http://127.0.0.1:5000/api/heart_rate/average/{}".format(p_id))
+        print(r)
+        print(r.text)
+        print(r.status_code)
+        if r.status_code == 200:
+            answer = r.json()
+            print(answer)
+
+
 if __name__ == '__main__':
     test_add_patients()
     test_heart_rate()
     test_ave_hr_since()
+    request_on_status()
+    request_on_hr_list()
+    request_on_ave_hr()
