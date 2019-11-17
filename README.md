@@ -174,7 +174,26 @@ The server writes to a log file when the following events occur:
 5. Ensure the existence of the files named `hr_server.py`, `send_email.py` and `test_hr_server.py`. Another python file is `hr_client.py`, which is used for testing the function of server by making up some patient data.
 6. Run the command `pytest -v` in your bash window. It will automatically test the function in `hr_server.py`. If all pass, we are expected to see the following output (just part of it).
     ```
-    
+    ========================================================================================================= test session starts =========================================================================================================
+    platform darwin -- Python 3.7.1, pytest-5.2.2, py-1.8.0, pluggy-0.13.0 -- /Users/liangyu/Downloads/Docs/BME/BME547/Homework/hr-sentinel-server-memerye/myvenv/bin/python
+    cachedir: .pytest_cache
+    rootdir: /Users/liangyu/Downloads/Docs/BME/BME547/Homework/hr-sentinel-server-memerye
+    plugins: pep8-1.0.6
+    collected 57 items                                                                                                                                                                                                                    
+
+    hr_client.py PASSED                                                                                                                                                                                                             [  1%]
+    hr_server.py PASSED                                                                                                                                                                                                             [  3%]
+    send_email.py PASSED                                                                                                                                                                                                            [  5%]
+    test_hr_server.py PASSED                                                                                                                                                                                                        [  7%]
+    test_hr_server.py::test_validate_patient_keys[patient_info0-True] PASSED                                                                                                                                                        [  8%]
+    test_hr_server.py::test_validate_patient_keys[patient_info1-False] PASSED                                                                                                                                                       [ 10%]
+    test_hr_server.py::test_validate_patient_keys[patient_info2-False] PASSED                                                                                                                                                       [ 12%]
+    test_hr_server.py::test_validate_patient_id[patient_info0-1] PASSED                                                                                                                                                             [ 14%]
+    ......
+    test_hr_server.py::test_ave_hr_since[100-2019-11-11 11:00:00.00-100] PASSED                                                                                                                                                     [ 96%]
+    test_hr_server.py::test_ave_hr_since[100-2020-11-11 11:00:00.00-False] PASSED                                                                                                                                                   [ 98%]
+    docs/conf.py PASSED                                                                                                                                                                                                             [100%]
+    =================================================================================================== 57 passed, 2 warnings in 4.34s ====================================================================================================
     ```
     * You can also change the testing arguments and expected results in the `test_ecg.py` and re-run the pytest command.
 7. Run the command `python hr_server.py` in your bash window to start the server. The log for running `hr_server.py` would be created at the current file path.
