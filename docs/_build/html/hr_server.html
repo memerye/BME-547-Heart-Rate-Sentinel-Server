@@ -1,0 +1,684 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>hr_server module &#8212; Heart Rate Sentinel Server  documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="send_email module" href="send_email.html" />
+    <link rel="prev" title="Welcome to Heart Rate Sentinel Server’s documentation!" href="index.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-hr_server">
+<span id="hr-server-module"></span><h1>hr_server module<a class="headerlink" href="#module-hr_server" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="hr_server.Patient">
+<em class="property">class </em><code class="sig-prename descclassname">hr_server.</code><code class="sig-name descname">Patient</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#hr_server.Patient" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pymodm.base.models.MongoModel</span></code></p>
+<dl class="exception">
+<dt id="hr_server.Patient.DoesNotExist">
+<em class="property">exception </em><code class="sig-name descname">DoesNotExist</code><a class="headerlink" href="#hr_server.Patient.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pymodm.errors.DoesNotExist</span></code></p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="hr_server.Patient.MultipleObjectsReturned">
+<em class="property">exception </em><code class="sig-name descname">MultipleObjectsReturned</code><a class="headerlink" href="#hr_server.Patient.MultipleObjectsReturned" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pymodm.errors.MultipleObjectsReturned</span></code></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hr_server.Patient.attending_email">
+<code class="sig-name descname">attending_email</code><a class="headerlink" href="#hr_server.Patient.attending_email" title="Permalink to this definition">¶</a></dt>
+<dd><p>A field that stores email addresses.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hr_server.Patient.heart_rate">
+<code class="sig-name descname">heart_rate</code><a class="headerlink" href="#hr_server.Patient.heart_rate" title="Permalink to this definition">¶</a></dt>
+<dd><p>A field that stores a list.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hr_server.Patient.objects">
+<code class="sig-name descname">objects</code><a class="headerlink" href="#hr_server.Patient.objects" title="Permalink to this definition">¶</a></dt>
+<dd><p>The default manager used for <code class="xref py py-class docutils literal notranslate"><span class="pre">MongoModel</span></code> instances.</p>
+<p>This implementation of <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseManager</span></code> uses
+<code class="xref py py-class docutils literal notranslate"><span class="pre">QuerySet</span></code> as its QuerySet class.</p>
+<p>This Manager class (accessed via the <code class="docutils literal notranslate"><span class="pre">objects</span></code> attribute on a
+<code class="xref py py-class docutils literal notranslate"><span class="pre">MongoModel</span></code>) is used by default for all MongoModel classes,
+unless another Manager instance is supplied as an attribute within the
+MongoModel definition.</p>
+<p>Managers have two primary functions:</p>
+<ol class="arabic simple">
+<li><p>Construct <code class="xref py py-class docutils literal notranslate"><span class="pre">QuerySet</span></code> instances for use when
+querying or working with <code class="xref py py-class docutils literal notranslate"><span class="pre">MongoModel</span></code> instances in bulk.</p></li>
+<li><p>Define collection-level functionality that can be reused across different
+MongoModel types.</p></li>
+</ol>
+<p>If you created a custom QuerySet that makes certain queries easier, for
+example, you will need to create a custom Manager type that returns this
+queryset using the <code class="xref py py-meth docutils literal notranslate"><span class="pre">from_queryset()</span></code>
+method:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">UserQuerySet</span><span class="p">(</span><span class="n">QuerySet</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">active</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;Return only active users.&#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">raw</span><span class="p">({</span><span class="s2">&quot;active&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">})</span>
+
+<span class="k">class</span> <span class="nc">User</span><span class="p">(</span><span class="n">MongoModel</span><span class="p">):</span>
+    <span class="n">active</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">BooleanField</span><span class="p">()</span>
+    <span class="c1"># Add our custom Manager.</span>
+    <span class="n">users</span> <span class="o">=</span> <span class="n">Manager</span><span class="o">.</span><span class="n">from_queryset</span><span class="p">(</span><span class="n">UserQuerySet</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>In the above example, we added a <cite>users</cite> attribute on <cite>User</cite> so that we can
+use the <cite>active</cite> method on our new QuerySet type:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">active_users</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="n">users</span><span class="o">.</span><span class="n">active</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>If we wanted every method on the QuerySet to examine active users <em>only</em>, we
+can do that by customizing the Manager itself:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">UserManager</span><span class="p">(</span><span class="n">Manager</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">get_queryset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Override get_queryset, so that every QuerySet created will</span>
+        <span class="c1"># have this filter applied.</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">UserManager</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">get_queryset</span><span class="p">()</span><span class="o">.</span><span class="n">raw</span><span class="p">(</span>
+            <span class="p">{</span><span class="s2">&quot;active&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">})</span>
+
+<span class="k">class</span> <span class="nc">User</span><span class="p">(</span><span class="n">MongoModel</span><span class="p">):</span>
+    <span class="n">active</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">BooleanField</span><span class="p">()</span>
+    <span class="n">users</span> <span class="o">=</span> <span class="n">UserManager</span><span class="p">()</span>
+
+<span class="n">active_users</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="n">users</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hr_server.Patient.patient_age">
+<code class="sig-name descname">patient_age</code><a class="headerlink" href="#hr_server.Patient.patient_age" title="Permalink to this definition">¶</a></dt>
+<dd><p>A field that stores a Python <cite>float</cite>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hr_server.Patient.patient_id">
+<code class="sig-name descname">patient_id</code><a class="headerlink" href="#hr_server.Patient.patient_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>A field that stores a Python int.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hr_server.Patient.status">
+<code class="sig-name descname">status</code><a class="headerlink" href="#hr_server.Patient.status" title="Permalink to this definition">¶</a></dt>
+<dd><p>A field that stores a list.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hr_server.Patient.timestamp">
+<code class="sig-name descname">timestamp</code><a class="headerlink" href="#hr_server.Patient.timestamp" title="Permalink to this definition">¶</a></dt>
+<dd><p>A field that stores a list.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="hr_server.add_hr_to_db">
+<code class="sig-prename descclassname">hr_server.</code><code class="sig-name descname">add_hr_to_db</code><span class="sig-paren">(</span><em class="sig-param">p_json</em><span class="sig-paren">)</span><a class="headerlink" href="#hr_server.add_hr_to_db" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a new heart rate to database.</p>
+<p>When add new heart rate information to the database, we extract
+the patient information from the database by “patient_id”. And
+put the values in json to the corresponding “heart_rate”,
+“status”, and “timestamp” as a list. All of the updated
+information would be saved in the database.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>p_json</strong> (<em>dict</em>) – the posted patient heart rate information</p></li>
+<li><p><strong>the keys of &quot;patient_id&quot;</strong><strong>, </strong><strong>&quot;heart_rate&quot;</strong><strong>, </strong><strong>&quot;status&quot;</strong><strong>,</strong> (<em>with</em>) – </p></li>
+<li><p><strong>&quot;timestamp&quot;.</strong> (<em>and</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="hr_server.add_new_patient_to_db">
+<code class="sig-prename descclassname">hr_server.</code><code class="sig-name descname">add_new_patient_to_db</code><span class="sig-paren">(</span><em class="sig-param">p_json</em><span class="sig-paren">)</span><a class="headerlink" href="#hr_server.add_new_patient_to_db" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a new patient to database.</p>
+<p>When add a new patient to the database, the patient only have
+the basic information of “patient_id”, “attending_email”,
+and “patient_age”. “heart_rate”, “status”, and “timestamp”
+are all initialized as a list containing with single element 0.
+All of the updated information would be saved in the database.
+If the patient id has existed in the database, the information
+of “attending_email” and the “patient_age” would be updated while
+other information will be erased.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>p_json</strong> (<em>dict</em>) – the posted patient data with the keys</p></li>
+<li><p><strong>&quot;patient_id&quot;</strong><strong>, </strong><strong>&quot;attending_email&quot;</strong><strong>, </strong><strong>and &quot;patient_age&quot;.</strong> (<em>of</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="hr_server.age_and_email">
+<code class="sig-prename descclassname">hr_server.</code><code class="sig-name descname">age_and_email</code><span class="sig-paren">(</span><em class="sig-param">p_id</em><span class="sig-paren">)</span><a class="headerlink" href="#hr_server.age_and_email" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the age information of a patient if knowing the id.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>p_id</strong> (<em>int</em>) – the patient id.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the patient age.
+string: the doctor email.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="hr_server.ave_hr_since">
+<code class="sig-prename descclassname">hr_server.</code><code class="sig-name descname">ave_hr_since</code><span class="sig-paren">(</span><em class="sig-param">p_id</em>, <em class="sig-param">start_t_str</em><span class="sig-paren">)</span><a class="headerlink" href="#hr_server.ave_hr_since" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the interval heart rate average.</p>
+<p>The function returns the average, as an integer, of all
+the heart rates that have been posted for the specified
+patient since the given date/time. If no heart rate before
+this given date/time, the function will return False.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>p_id</strong> (<em>int</em>) – the patient id.</p></li>
+<li><p><strong>start_t_str</strong> (<em>string</em>) – the start time to compute the average.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>False if NO heart rate before given timestamp.
+int: average interval heart rate.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="hr_server.get_ave_hr">
+<code class="sig-prename descclassname">hr_server.</code><code class="sig-name descname">get_ave_hr</code><span class="sig-paren">(</span><em class="sig-param">patient_id</em><span class="sig-paren">)</span><a class="headerlink" href="#hr_server.get_ave_hr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate and return the average of all heart rate.</p>
+<p>This function returns the patient’s average heart rate, as an integer,
+of all measurements have stored for this patient. If the patient id
+doesn’t exist, the server will return error status codes with
+reasons.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>patient_id</strong> (<em>int</em>) – the patient id.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>False if no existing patient.
+json: a json message of the averaged integer heart rate.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="hr_server.get_hr_list">
+<code class="sig-prename descclassname">hr_server.</code><code class="sig-name descname">get_hr_list</code><span class="sig-paren">(</span><em class="sig-param">patient_id</em><span class="sig-paren">)</span><a class="headerlink" href="#hr_server.get_hr_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return all heart rate records of a patient.</p>
+<p>This function returns a list of all the previous heart rate
+records for the patient with specific id, as a list of integers.
+If the patient id doesn’t exist, the server will return
+error status codes with reasons.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>patient_id</strong> (<em>int</em>) – the patient id.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>False if no existing patient.
+json: a json message containing a list of integers of heart rate.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="hr_server.get_status">
+<code class="sig-prename descclassname">hr_server.</code><code class="sig-name descname">get_status</code><span class="sig-paren">(</span><em class="sig-param">patient_id</em><span class="sig-paren">)</span><a class="headerlink" href="#hr_server.get_status" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function returns a JSON containing the latest heart rate,
+as an integer, for the specified patient, whether this patient
+is currently tachycardic based on this most recently posted heart
+rate, and the date/time stamp of this most recent heart rate. If
+the patient id doesn’t exist, the server will return error
+status codes with reasons.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>patient_id</strong> (<em>int</em>) – the patient id.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>False if no existing patient.
+json: a json message containing the latest “heart_rate”,
+“status” and “timestamp”.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="hr_server.hr_and_t">
+<code class="sig-prename descclassname">hr_server.</code><code class="sig-name descname">hr_and_t</code><span class="sig-paren">(</span><em class="sig-param">p_id</em><span class="sig-paren">)</span><a class="headerlink" href="#hr_server.hr_and_t" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the list of heart rate and timestamp based on patient id.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>p_id</strong> (<em>int</em>) – the patient id.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the heart rate.
+string: the timestamp</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="hr_server.init_server">
+<code class="sig-prename descclassname">hr_server.</code><code class="sig-name descname">init_server</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#hr_server.init_server" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize the logging configuration and database connection.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>None.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="hr_server.is_tachycardia">
+<code class="sig-prename descclassname">hr_server.</code><code class="sig-name descname">is_tachycardia</code><span class="sig-paren">(</span><em class="sig-param">age</em>, <em class="sig-param">hr</em><span class="sig-paren">)</span><a class="headerlink" href="#hr_server.is_tachycardia" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if the heart rate is tachycardic based on the age.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>age</strong> (<em>int</em>) – the patient age.</p></li>
+<li><p><strong>hr</strong> (<em>int</em>) – the heart rate of the patient.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>“tachycardic” or “not tachycardic”.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>string</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="hr_server.post_add_patients">
+<code class="sig-prename descclassname">hr_server.</code><code class="sig-name descname">post_add_patients</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#hr_server.post_add_patients" title="Permalink to this definition">¶</a></dt>
+<dd><p>Post a new patient to the database.</p>
+<p>Before posting a new patient to database, the keys and the
+values in the posted json should all be validated first. Then
+the new patient can be registered in the server as well as saved
+in the database. The “patient_id” is the primary key for each
+patient, so it should be unique for each patient. If we upload
+the same “patient_id” to the database, it only update the
+information of that patient. If there are anything invalid in
+the posted json, the server will return error status codes with
+reasons.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>message to indicate the status of the server.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>string</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="hr_server.post_ave_hr_since">
+<code class="sig-prename descclassname">hr_server.</code><code class="sig-name descname">post_ave_hr_since</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#hr_server.post_ave_hr_since" title="Permalink to this definition">¶</a></dt>
+<dd><p>Post interval heart rate based on the given date/time.</p>
+<p>The “heart_rate_average_since” will be a datetime string in the
+format of “year-month-day hour:mimute:second.Microsecond”. This
+POST returns the average, as an integer, of all the heart rates
+that have been posted for the specified patient since the given
+date/time. If no heart rate before this given date/time, the
+server will return error status code.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>message to indicate the status of the server.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>string</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="hr_server.post_heart_rate">
+<code class="sig-prename descclassname">hr_server.</code><code class="sig-name descname">post_heart_rate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#hr_server.post_heart_rate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Post new patient heart rate information to the database.</p>
+<p>Before posting new patient heart rate information to database,
+the keys and the values in the posted json are all validated
+first. The existence of the patient id are checked next. All
+of the failures in validation and check would raise error in
+server. Then the new patient heart rate information can be
+registered in the server as well as saved in the database. The
+“patient_id” is still the primary key for each patient, we update
+the heart rate information including “heart_rate”, “status”, and
+“timestamp” based on id. If we upload the information with the
+same “patient_id” to the database, it would add the heart rate
+information as a list under that id. If there are anything invalid
+in the posted json, the server will return error status codes with
+reasons. If any of the heart rate exhibits tachycardic, an email
+will be sent to doctor’s email.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>message to indicate the status of the server.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>string</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="hr_server.validate_avr_hr_keys">
+<code class="sig-prename descclassname">hr_server.</code><code class="sig-name descname">validate_avr_hr_keys</code><span class="sig-paren">(</span><em class="sig-param">patient_hr</em><span class="sig-paren">)</span><a class="headerlink" href="#hr_server.validate_avr_hr_keys" title="Permalink to this definition">¶</a></dt>
+<dd><p>Validate the keys when posting interval average.</p>
+<p>The keys of this posted interval average should only
+contain “patient_id” and “heart_rate_average_since”,
+otherwise it would be regarded as wrong information.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>patient_hr</strong> (<em>dict</em>) – the posted information for interval average.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>True if the keys are all valid;</dt><dd><p>False if it contains wrong keys.</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="hr_server.validate_existing_id">
+<code class="sig-prename descclassname">hr_server.</code><code class="sig-name descname">validate_existing_id</code><span class="sig-paren">(</span><em class="sig-param">p_id</em><span class="sig-paren">)</span><a class="headerlink" href="#hr_server.validate_existing_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Validate the existence of the patient id in the database.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>p_id</strong> (<em>int</em>) – the patient id.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>False if the id doesn’t exist in the database;</dt><dd><p>True if the id has been registered in the database.</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="hr_server.validate_hr">
+<code class="sig-prename descclassname">hr_server.</code><code class="sig-name descname">validate_hr</code><span class="sig-paren">(</span><em class="sig-param">patient_hr</em><span class="sig-paren">)</span><a class="headerlink" href="#hr_server.validate_hr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Validate the heart rate when posting the heart rate of a patient.</p>
+<p>The heart rate should be numeric whether it is an integer or a
+string containing an integer. eg: valid for 85 or “85”, but not
+valid for 85.5, “85.5”, “85a”, etc.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>patient_hr</strong> (<em>dict</em>) – the posted patient heart rate.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>if it has wrong type of heart rate;
+int: return the integer age if the heart rate is valid.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>False</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="hr_server.validate_hr_keys">
+<code class="sig-prename descclassname">hr_server.</code><code class="sig-name descname">validate_hr_keys</code><span class="sig-paren">(</span><em class="sig-param">patient_hr</em><span class="sig-paren">)</span><a class="headerlink" href="#hr_server.validate_hr_keys" title="Permalink to this definition">¶</a></dt>
+<dd><p>Validate the keys when posting the heart rate of a patient.</p>
+<p>The keys of this posted patient heart rate should
+only contain “patient_id” and “heart_rate”, otherwise
+it would be regarded as wrong information.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>patient_hr</strong> (<em>dict</em>) – the posted patient heart rate.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>True if the keys are all valid;</dt><dd><p>False if it contains wrong keys.</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="hr_server.validate_patient_age">
+<code class="sig-prename descclassname">hr_server.</code><code class="sig-name descname">validate_patient_age</code><span class="sig-paren">(</span><em class="sig-param">patient_info</em><span class="sig-paren">)</span><a class="headerlink" href="#hr_server.validate_patient_age" title="Permalink to this definition">¶</a></dt>
+<dd><p>Validate the patient age when posting a new patient.</p>
+<p>The age should be numeric whether it is an integer or a
+string containing an integer. eg: valid for 5 or “5”,
+but not valid for 5.5, “5.5”, “5a”, etc.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>patient_info</strong> (<em>dict</em>) – the posted patient data.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>if it has wrong type of age;
+int: return the integer age if the age is valid.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>False</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="hr_server.validate_patient_email">
+<code class="sig-prename descclassname">hr_server.</code><code class="sig-name descname">validate_patient_email</code><span class="sig-paren">(</span><em class="sig-param">patient_info</em><span class="sig-paren">)</span><a class="headerlink" href="#hr_server.validate_patient_email" title="Permalink to this definition">¶</a></dt>
+<dd><p>Validate the patient email when posting a new patient.</p>
+<p>The email should be valid with the username, &#64; symbol and
+the domain name. The username have to start with word
+characters (a-z, A-Z, 0-9 and underscore) and can contain
+. and -. The domain name can contain one or more times
+of a . followed by two or three word characters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>patient_info</strong> (<em>dict</em>) – the posted patient data.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>if it has wrong type of email;
+string: return the string of email if the email is valid.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>False</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="hr_server.validate_patient_id">
+<code class="sig-prename descclassname">hr_server.</code><code class="sig-name descname">validate_patient_id</code><span class="sig-paren">(</span><em class="sig-param">patient_info</em><span class="sig-paren">)</span><a class="headerlink" href="#hr_server.validate_patient_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Validate the patient id when posting a new patient.</p>
+<p>The id should be numeric whether it is an integer or a
+string containing an integer. eg: valid for 5 or “5”,
+but not valid for 5.5, “5.5”, “5a”, etc.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>patient_info</strong> (<em>dict</em>) – the posted patient data.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>if it has wrong type of id;
+int: return the integer id if the id is valid.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>False</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="hr_server.validate_patient_keys">
+<code class="sig-prename descclassname">hr_server.</code><code class="sig-name descname">validate_patient_keys</code><span class="sig-paren">(</span><em class="sig-param">patient_info</em><span class="sig-paren">)</span><a class="headerlink" href="#hr_server.validate_patient_keys" title="Permalink to this definition">¶</a></dt>
+<dd><p>Validate the keys when posting a new patient.</p>
+<p>The keys of this posted patient information should
+only contain “patient_id”, “attending_email”, and
+“patient_age”, otherwise it would be regarded as
+wrong information.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>patient_info</strong> (<em>dict</em>) – the posted patient data.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>True if the keys are all valid;</dt><dd><p>False if it contains wrong keys.</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="hr_server.validate_time">
+<code class="sig-prename descclassname">hr_server.</code><code class="sig-name descname">validate_time</code><span class="sig-paren">(</span><em class="sig-param">indata</em><span class="sig-paren">)</span><a class="headerlink" href="#hr_server.validate_time" title="Permalink to this definition">¶</a></dt>
+<dd><p>Validate the tiemstamp when posting interval average.</p>
+<p>The posted value for “heart_rate_average_since” should follow
+the format of “year-month-day hour:mimute:second.microsecond”.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>indata</strong> (<em>dict</em>) – the posted information for interval average.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>False if the timestamp is not valid;
+string: the timestamp if it is valid.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Heart Rate Sentinel Server</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">hr_server module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="send_email.html">send_email module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hr_client.html">hr_client module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="test_hr_server.html">test_hr_server module</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">Welcome to Heart Rate Sentinel Server’s documentation!</a></li>
+      <li>Next: <a href="send_email.html" title="next chapter">send_email module</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Liangyu Xu.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.2.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/hr_server.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

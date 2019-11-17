@@ -1,0 +1,390 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>test_hr_server module &#8212; Heart Rate Sentinel Server  documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="hr_client module" href="hr_client.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-test_hr_server">
+<span id="test-hr-server-module"></span><h1>test_hr_server module<a class="headerlink" href="#module-test_hr_server" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="test_hr_server.test_add_hr_to_db">
+<code class="sig-prename descclassname">test_hr_server.</code><code class="sig-name descname">test_add_hr_to_db</code><span class="sig-paren">(</span><em class="sig-param">hr_info</em>, <em class="sig-param">e_id</em>, <em class="sig-param">e_hr</em>, <em class="sig-param">e_status</em>, <em class="sig-param">e_timestamp</em><span class="sig-paren">)</span><a class="headerlink" href="#test_hr_server.test_add_hr_to_db" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test function add_hr_to_db</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hr_info</strong> (<em>dict</em>) – the posted patient heart rate information</p></li>
+<li><p><strong>the keys of &quot;patient_id&quot;</strong><strong>, </strong><strong>&quot;heart_rate&quot;</strong><strong>, </strong><strong>&quot;status&quot;</strong><strong>,</strong> (<em>with</em>) – </p></li>
+<li><p><strong>&quot;timestamp&quot;.</strong> (<em>and</em>) – </p></li>
+<li><p><strong>e_id</strong> (<em>int</em>) – the expected patient id</p></li>
+<li><p><strong>e_hr</strong> (<em>int</em>) – the expected patient heart rate</p></li>
+<li><p><strong>e_status</strong> (<em>string</em>) – the expected patient heart rate status</p></li>
+<li><p><strong>e_timestamp</strong> (<em>string</em>) – the expected timestamp</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Error if the test fails
+Pass if the test passes</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="test_hr_server.test_add_new_patient_to_db">
+<code class="sig-prename descclassname">test_hr_server.</code><code class="sig-name descname">test_add_new_patient_to_db</code><span class="sig-paren">(</span><em class="sig-param">p_info</em>, <em class="sig-param">e_id</em>, <em class="sig-param">e_email</em>, <em class="sig-param">e_age</em><span class="sig-paren">)</span><a class="headerlink" href="#test_hr_server.test_add_new_patient_to_db" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test function add_new_patient_to_db.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>p_info</strong> (<em>dict</em>) – the posted patient data with the keys</p></li>
+<li><p><strong>e_id</strong> – expected patient id</p></li>
+<li><p><strong>e_email</strong> – expected patient email</p></li>
+<li><p><strong>e_age</strong> – expected patient age</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Error if the test fails
+Pass if the test passes</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="test_hr_server.test_age_and_email">
+<code class="sig-prename descclassname">test_hr_server.</code><code class="sig-name descname">test_age_and_email</code><span class="sig-paren">(</span><em class="sig-param">p_id</em>, <em class="sig-param">e_age</em>, <em class="sig-param">e_email</em><span class="sig-paren">)</span><a class="headerlink" href="#test_hr_server.test_age_and_email" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test function age_and_email</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>p_id</strong> (<em>int</em>) – the patient id.</p></li>
+<li><p><strong>e_age</strong> (<em>string</em>) – the expected result of the age.</p></li>
+<li><p><strong>e_email</strong> (<em>string</em>) – the expected result of the email.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Error if the test fails
+Pass if the test passes</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="test_hr_server.test_ave_hr_since">
+<code class="sig-prename descclassname">test_hr_server.</code><code class="sig-name descname">test_ave_hr_since</code><span class="sig-paren">(</span><em class="sig-param">p_id</em>, <em class="sig-param">start_t_str</em>, <em class="sig-param">expected</em><span class="sig-paren">)</span><a class="headerlink" href="#test_hr_server.test_ave_hr_since" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test function ave_hr_since</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>p_id</strong> (<em>int</em>) – the patient id.</p></li>
+<li><p><strong>start_t_str</strong> (<em>string</em>) – the start time to compute the average.</p></li>
+<li><p><strong>expected</strong> (<em>bool</em><em> or </em><em>int</em>) – the expected result of the function.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Error if the test fails
+Pass if the test passes</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="test_hr_server.test_hr_and_t">
+<code class="sig-prename descclassname">test_hr_server.</code><code class="sig-name descname">test_hr_and_t</code><span class="sig-paren">(</span><em class="sig-param">p_id</em>, <em class="sig-param">e_hrs</em>, <em class="sig-param">e_timestamps</em><span class="sig-paren">)</span><a class="headerlink" href="#test_hr_server.test_hr_and_t" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test function hr_and_t</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>p_id</strong> (<em>int</em>) – the patient id.</p></li>
+<li><p><strong>e_hrs</strong> (<em>int</em>) – the expected heart rate</p></li>
+<li><p><strong>e_timestamps</strong> (<em>string</em>) – the expected timestamp</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Error if the test fails
+Pass if the test passes</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="test_hr_server.test_is_tachycardia">
+<code class="sig-prename descclassname">test_hr_server.</code><code class="sig-name descname">test_is_tachycardia</code><span class="sig-paren">(</span><em class="sig-param">age</em>, <em class="sig-param">hr</em>, <em class="sig-param">expected</em><span class="sig-paren">)</span><a class="headerlink" href="#test_hr_server.test_is_tachycardia" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test function is_tachycardia</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>age</strong> (<em>int</em>) – the patient age.</p></li>
+<li><p><strong>hr</strong> (<em>int</em>) – the heart rate of the patient.</p></li>
+<li><p><strong>expected</strong> (<em>string</em>) – the expected result of the function.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Error if the test fails
+Pass if the test passes</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="test_hr_server.test_validate_avr_hr_keys">
+<code class="sig-prename descclassname">test_hr_server.</code><code class="sig-name descname">test_validate_avr_hr_keys</code><span class="sig-paren">(</span><em class="sig-param">indata</em>, <em class="sig-param">expected</em><span class="sig-paren">)</span><a class="headerlink" href="#test_hr_server.test_validate_avr_hr_keys" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test function validate_avr_hr_keys</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>indata</strong> (<em>dict</em>) – the posted information for interval average.</p></li>
+<li><p><strong>expected</strong> (<em>bool</em>) – the expected result of the function.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Error if the test fails
+Pass if the test passes</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="test_hr_server.test_validate_existing_id">
+<code class="sig-prename descclassname">test_hr_server.</code><code class="sig-name descname">test_validate_existing_id</code><span class="sig-paren">(</span><em class="sig-param">p_id</em>, <em class="sig-param">expected</em><span class="sig-paren">)</span><a class="headerlink" href="#test_hr_server.test_validate_existing_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test function validate_existing_id</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>p_id</strong> (<em>int</em>) – the patient id.</p></li>
+<li><p><strong>expected</strong> (<em>bool</em>) – the existence of the id in database</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Error if the test fails
+Pass if the test passes</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="test_hr_server.test_validate_hr">
+<code class="sig-prename descclassname">test_hr_server.</code><code class="sig-name descname">test_validate_hr</code><span class="sig-paren">(</span><em class="sig-param">patient_hr</em>, <em class="sig-param">expected</em><span class="sig-paren">)</span><a class="headerlink" href="#test_hr_server.test_validate_hr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test function validate_hr.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>patient_hr</strong> (<em>dict</em>) – the posted patient heart rate.</p></li>
+<li><p><strong>expected</strong> (<em>bool</em><em> or </em><em>int</em>) – the expected result of the function.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Error if the test fails
+Pass if the test passes</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="test_hr_server.test_validate_hr_keys">
+<code class="sig-prename descclassname">test_hr_server.</code><code class="sig-name descname">test_validate_hr_keys</code><span class="sig-paren">(</span><em class="sig-param">patient_hr</em>, <em class="sig-param">expected</em><span class="sig-paren">)</span><a class="headerlink" href="#test_hr_server.test_validate_hr_keys" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test the function validate_hr_keys.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>patient_hr</strong> (<em>dict</em>) – the posted patient heart rate.</p></li>
+<li><p><strong>expected</strong> (<em>bool</em>) – the expected result of the function.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Error if the test fails
+Pass if the test passes</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="test_hr_server.test_validate_patient_age">
+<code class="sig-prename descclassname">test_hr_server.</code><code class="sig-name descname">test_validate_patient_age</code><span class="sig-paren">(</span><em class="sig-param">patient_info</em>, <em class="sig-param">expected</em><span class="sig-paren">)</span><a class="headerlink" href="#test_hr_server.test_validate_patient_age" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test function validate_patient_age.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>patient_info</strong> (<em>dict</em>) – the posted patient data.</p></li>
+<li><p><strong>expected</strong> (<em>bool</em><em> or </em><em>int</em>) – the expected result of the function.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Error if the test fails
+Pass if the test passes</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="test_hr_server.test_validate_patient_email">
+<code class="sig-prename descclassname">test_hr_server.</code><code class="sig-name descname">test_validate_patient_email</code><span class="sig-paren">(</span><em class="sig-param">patient_info</em>, <em class="sig-param">expected</em><span class="sig-paren">)</span><a class="headerlink" href="#test_hr_server.test_validate_patient_email" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test function validate_patient_email.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>patient_info</strong> (<em>dict</em>) – the posted patient data.</p></li>
+<li><p><strong>expected</strong> (<em>bool</em><em> or </em><em>int</em>) – the expected result of the function.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Error if the test fails
+Pass if the test passes</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="test_hr_server.test_validate_patient_id">
+<code class="sig-prename descclassname">test_hr_server.</code><code class="sig-name descname">test_validate_patient_id</code><span class="sig-paren">(</span><em class="sig-param">patient_info</em>, <em class="sig-param">expected</em><span class="sig-paren">)</span><a class="headerlink" href="#test_hr_server.test_validate_patient_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test function validate_patient_id.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>patient_info</strong> (<em>dict</em>) – the posted patient data.</p></li>
+<li><p><strong>expected</strong> (<em>bool</em><em> or </em><em>int</em>) – the expected result of the function.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Error if the test fails
+Pass if the test passes</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="test_hr_server.test_validate_patient_keys">
+<code class="sig-prename descclassname">test_hr_server.</code><code class="sig-name descname">test_validate_patient_keys</code><span class="sig-paren">(</span><em class="sig-param">patient_info</em>, <em class="sig-param">expected</em><span class="sig-paren">)</span><a class="headerlink" href="#test_hr_server.test_validate_patient_keys" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test the function validate_patient_keys.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>patient_info</strong> (<em>dict</em>) – the posted patient data.</p></li>
+<li><p><strong>expected</strong> (<em>bool</em>) – the expected result of the function.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Error if the test fails
+Pass if the test passes</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="test_hr_server.test_validate_time">
+<code class="sig-prename descclassname">test_hr_server.</code><code class="sig-name descname">test_validate_time</code><span class="sig-paren">(</span><em class="sig-param">indata</em>, <em class="sig-param">expected</em><span class="sig-paren">)</span><a class="headerlink" href="#test_hr_server.test_validate_time" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test function validate_time</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>indata</strong> (<em>dict</em>) – the posted information for interval average.</p></li>
+<li><p><strong>expected</strong> (<em>bool</em><em> or </em><em>string</em>) – the expected result of the function.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Error if the test fails
+Pass if the test passes</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Heart Rate Sentinel Server</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="hr_server.html">hr_server module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="send_email.html">send_email module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hr_client.html">hr_client module</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">test_hr_server module</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="hr_client.html" title="previous chapter">hr_client module</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Liangyu Xu.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.2.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/test_hr_server.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
