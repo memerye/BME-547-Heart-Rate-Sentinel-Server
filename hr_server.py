@@ -128,6 +128,9 @@ def add_new_patient_to_db(p_json):
     and "patient_age". "heart_rate", "status", and "timestamp"
     are all initialized as a list containing with single element 0.
     All of the updated information would be saved in the database.
+    If the patient id has existed in the database, the information
+    of "attending_email" and the "patient_age" would be updated while
+    other information will be erased.
 
     Args:
         p_json (dict): the posted patient data with the keys
@@ -282,7 +285,7 @@ def is_tachycardia(age, hr):
         return "tachycardic"
 
 
-def age(p_id):
+def age_and_email(p_id):
     """Get the age information of a patient if knowing the id.
 
     Args:
@@ -290,9 +293,10 @@ def age(p_id):
 
     Returns:
         int: the patient age.
+        string: the doctor email.
     """
     p_db_init = Patient.objects.raw({"_id": p_id}).first()
-    return p_db_init.patient_age
+    return p_db_init.patient_age, p_db_init.attending_email
 
 
 def add_hr_to_db(p_json):
@@ -362,18 +366,17 @@ def post_heart_rate():
     p_hr = validate_hr(indata)
     if p_hr is False:
         return "Please enter an integer heart rate.", 400
-    p_age = age(p_id)
+    p_age, p_email = age_and_email(p_id)
     indata["status"] = is_tachycardia(p_age, p_hr)
     indata["timestamp"] = str(datetime.now())
     add_hr_to_db(indata)
     if indata["status"] is "tachycardic":
-        global to_email
         global flag_send_email
-        email(to_email, p_id, p_hr, indata["timestamp"], flag_send_email)
+        email(p_email, p_id, p_hr, indata["timestamp"], flag_send_email)
         logging.warning("* Sent the email to {}."
                         "\n               Patient ID: {}"
                         "\n               Heart rate: {}"
-                        .format(to_email, p_id, p_hr))
+                        .format(p_email, p_id, p_hr))
     return "Valid patient heart rate and saved to database!"
 
 
@@ -481,7 +484,7 @@ def validate_time(indata):
     """Validate the tiemstamp when posting interval average.
 
     The posted value for "heart_rate_average_since" should follow
-    the format of "year-month-day hour:mimute:second.Microsecond".
+    the format of "year-month-day hour:mimute:second.microsecond".
 
     Args:
         indata (dict): the posted information for interval average.
@@ -598,7 +601,6 @@ def init_server():
 
 
 if __name__ == "__main__":
-    to_email = 'liangyuxu121@gmail.com'
     flag_send_email = True
     init_server()
     app.run()
