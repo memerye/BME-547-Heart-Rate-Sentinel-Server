@@ -1,0 +1,247 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>hr_client module &#8212; Heart Rate Sentinel Server  documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="test_hr_server module" href="test_hr_server.html" />
+    <link rel="prev" title="send_email module" href="send_email.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-hr_client">
+<span id="hr-client-module"></span><h1>hr_client module<a class="headerlink" href="#module-hr_client" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="hr_client.post_a_patient">
+<code class="sig-prename descclassname">hr_client.</code><code class="sig-name descname">post_a_patient</code><span class="sig-paren">(</span><em class="sig-param">info</em><span class="sig-paren">)</span><a class="headerlink" href="#hr_client.post_a_patient" title="Permalink to this definition">¶</a></dt>
+<dd><p>The client function of posting a new patient.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>info</strong> (<em>dict</em>) – the dictionary of patient’s information.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="hr_client.post_ave_heart_rate_since">
+<code class="sig-prename descclassname">hr_client.</code><code class="sig-name descname">post_ave_heart_rate_since</code><span class="sig-paren">(</span><em class="sig-param">info</em><span class="sig-paren">)</span><a class="headerlink" href="#hr_client.post_ave_heart_rate_since" title="Permalink to this definition">¶</a></dt>
+<dd><p>The client function of posting a timestamp to get the interval average.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>info</strong> (<em>dict</em>) – the dictionary of patient’s information.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="hr_client.post_heart_rate">
+<code class="sig-prename descclassname">hr_client.</code><code class="sig-name descname">post_heart_rate</code><span class="sig-paren">(</span><em class="sig-param">info</em><span class="sig-paren">)</span><a class="headerlink" href="#hr_client.post_heart_rate" title="Permalink to this definition">¶</a></dt>
+<dd><p>The client function of posting a new heart rate.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>info</strong> (<em>dict</em>) – the dictionary of patient’s information.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="hr_client.request_on_ave_hr">
+<code class="sig-prename descclassname">hr_client.</code><code class="sig-name descname">request_on_ave_hr</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#hr_client.request_on_ave_hr" title="Permalink to this definition">¶</a></dt>
+<dd><p>The client function of getting average heart rate of a patient</p>
+<p>The result will be printed out.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="hr_client.request_on_hr_list">
+<code class="sig-prename descclassname">hr_client.</code><code class="sig-name descname">request_on_hr_list</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#hr_client.request_on_hr_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>The client function of getting heart rate list of a patient</p>
+<p>The result will be printed out.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="hr_client.request_on_status">
+<code class="sig-prename descclassname">hr_client.</code><code class="sig-name descname">request_on_status</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#hr_client.request_on_status" title="Permalink to this definition">¶</a></dt>
+<dd><p>The client function of getting heart rate status of a patient</p>
+<p>The result will be printed out.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="hr_client.test_add_patients">
+<code class="sig-prename descclassname">hr_client.</code><code class="sig-name descname">test_add_patients</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#hr_client.test_add_patients" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a pseudo-list of patients information to
+add into the server and database.</p>
+<p>The pseudo-list of patients contains error of:
+(1) wrong dictionary keys
+(2) invalid patient id
+(3) invalid patient email address
+(4) invalid patient age
+(5) update patient information for existing patient id
+Ultimately three valid patient information with the id of 5, 6, and 7.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="hr_client.test_ave_hr_since">
+<code class="sig-prename descclassname">hr_client.</code><code class="sig-name descname">test_ave_hr_since</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#hr_client.test_ave_hr_since" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a pseudo-list of time information to calculate the
+interval average heart rate.</p>
+<p>The pseudo-list of patients contains error of:
+(1) wrong dictionary keys
+(2) invalid patient id
+(3) not exist patient id
+(4) invalid timestamp
+(5) no timestamp in database is ahead of given timestamp
+And one valid time information to calculate the interval average
+heart rate of id 5 since “2019-11-12 16:16:38.991052”.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="hr_client.test_heart_rate">
+<code class="sig-prename descclassname">hr_client.</code><code class="sig-name descname">test_heart_rate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#hr_client.test_heart_rate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a pseudo-list of patients heart rate information to
+add into the server and database.</p>
+<p>The pseudo-list of patients contains error of:
+(1) wrong dictionary keys
+(2) invalid patient id
+(3) not exist patient id
+(4) invalid patient heart rate
+And nine valid patient hear rate information equally distributed
+with the id of 5, 6, and 7.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Heart Rate Sentinel Server</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="hr_server.html">hr_server module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="send_email.html">send_email module</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">hr_client module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="test_hr_server.html">test_hr_server module</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="send_email.html" title="previous chapter">send_email module</a></li>
+      <li>Next: <a href="test_hr_server.html" title="next chapter">test_hr_server module</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Liangyu Xu.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.2.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/hr_client.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
