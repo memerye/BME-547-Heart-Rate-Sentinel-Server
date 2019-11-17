@@ -1,4 +1,5 @@
 # Heart Rate Sentinel Server
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/bme547-fall2019/hr-sentinel-server-memerye/blob/master/LICENSE)
 [![Build Status](https://travis-ci.com/bme547-fall2019/ecg-analysis-memerye.svg?token=7FEBMaBYsSUBFsqKGuGE&branch=master)](https://travis-ci.com/bme547-fall2019/hr-sentinel-server-memerye)
 
 
