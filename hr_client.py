@@ -59,7 +59,8 @@ def test_add_patients():
     (2) invalid patient id
     (3) invalid patient email address
     (4) invalid patient age
-    And three valid patient information with the id of 5, 6, and 7.
+    (5) update patient information for existing patient id
+    Ultimately three valid patient information with the id of 5, 6, and 7.
 
     Returns:
         None
@@ -77,13 +78,16 @@ def test_add_patients():
                "attending_email": "dr_user_idyour@domain.com",
                "patient_age": "a50"},
               {"patient_id": "5",
-               "attending_email": "5555@domain.com",
+               "attending_email": "555@domain.com",
+               "patient_age": 50},
+              {"patient_id": "5",
+               "attending_email": "liangyuxu121@gmail.com",
                "patient_age": 50},
               {"patient_id": "6",
-               "attending_email": "6666@domain.com",
+               "attending_email": "liangyuxu121@gmail.com",
                "patient_age": 14},
               {"patient_id": "7",
-               "attending_email": "7777@domain.com",
+               "attending_email": "liangyuxu121@gmail.com",
                "patient_age": 1}]
     for info in p_info:
         post_a_patient(info)
@@ -131,8 +135,8 @@ def test_ave_hr_since():
     (1) wrong dictionary keys
     (2) invalid patient id
     (3) not exist patient id
-    (3) invalid timestamp
-    (4) no timestamp in database is ahead of given timestamp
+    (4) invalid timestamp
+    (5) no timestamp in database is ahead of given timestamp
     And one valid time information to calculate the interval average
     heart rate of id 5 since "2019-11-12 16:16:38.991052".
 

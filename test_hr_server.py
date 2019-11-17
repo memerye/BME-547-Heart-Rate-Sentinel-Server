@@ -123,7 +123,14 @@ def test_validate_patient_age(patient_info, expected):
 @pytest.mark.parametrize("p_info, e_id, e_email, e_age", [
     ({"patient_id": "100",
       "attending_email": "100@yourdomain.com",
-      "patient_age": 50}, 100, "100@yourdomain.com", 50)])
+      "patient_age": 50}, 100, "100@yourdomain.com", 50),
+    ({"patient_id": "100",
+      "attending_email": "100new@yourdomain.com",
+      "patient_age": 50}, 100, "100new@yourdomain.com", 50),
+    ({"patient_id": "200",
+      "attending_email": "200@yourdomain.com",
+      "patient_age": 10}, 200, "200@yourdomain.com", 10),
+])
 def test_add_new_patient_to_db(p_info, e_id, e_email, e_age):
     """Test function add_new_patient_to_db.
 
@@ -247,24 +254,27 @@ def test_is_tachycardia(age, hr, expected):
     assert result == expected
 
 
-@pytest.mark.parametrize("p_id, e_age", [(100, 50)])
-def test_age(p_id, e_age):
-    """Test function age
+@pytest.mark.parametrize("p_id, e_age, e_email",
+                         [(100, 50, "100new@yourdomain.com")])
+def test_age_and_email(p_id, e_age, e_email):
+    """Test function age_and_email
 
     Args:
         p_id (int): the patient id.
-        e_age (string): the expected result of the function.
+        e_age (string): the expected result of the age.
+        e_email (string): the expected result of the email.
 
     Returns:
         Error if the test fails
         Pass if the test passes
     """
-    from hr_server import age, Patient
+    from hr_server import age_and_email, Patient
     connect("mongodb+srv://python-code:xly760022@bme547-plgi0."
             "mongodb.net/test?retryWrites=true&w=majority")
-    age(p_id)
+    e_age, e_email = age_and_email(p_id)
     p = Patient.objects.raw({"_id": p_id}).first()
     assert p.patient_age == e_age
+    assert p.attending_email == e_email
 
 
 @pytest.mark.parametrize("hr_info, e_id, e_hr, e_status, e_timestamp", [
